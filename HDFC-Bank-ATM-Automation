@@ -1,0 +1,96 @@
+customer = [
+    {
+        "card": "1234567890",
+        "pin": "1234",
+        "name": "Krishna",
+        "balance": 1000
+    },
+    {
+        "card": "9876543210",
+        "pin": "1432",
+        "name": "Sunil",
+        "balance": 1500
+    },
+    {
+        "card": "7205890700",
+        "pin": "1433",
+        "name": "John",
+        "balance": 2000
+    }
+]
+
+print("***** HDFC BANK ATM *****")
+
+while True:
+    print("\n1. New Customer")
+    print("2. Existing Customer")
+    print("3. Exit")
+    choice = input("Enter your choice: ")
+
+    if choice == "1":
+        card = input("Enter Account No: ")
+        pin = input("Enter Pin: ")
+        name = input("Enter Name: ")
+        balance = int(input("Enter Initial Deposit: "))
+
+        new_customer = {
+            "card": card,
+            "pin": pin,
+            "name": name,
+            "balance": balance
+        }
+        customer.append(new_customer)
+        print("New customer added successfully.")
+        print("Customer Details:")
+        print("Name:", name)
+        print("Balance:", balance)
+
+    elif choice == "2":
+        card = input("Enter card no: ")
+        pin = input("Enter your Pin: ")
+
+        authenticated_customer = None
+        for i in customer:
+            if i["card"] == card and i["pin"] == pin:
+                authenticated_customer = i
+                break
+
+        if authenticated_customer is None:
+            print("Invalid credentials")
+        else:
+            print("Hello", authenticated_customer["name"])
+            while True:
+                print('Your current balance is', authenticated_customer["balance"])
+                print("1. Deposit")
+                print("2. Withdraw")
+                print("3. Fund Transfer")
+                print("4. Exit")
+                choice = input("Enter your choice: ")
+                if choice == "1":
+                    amount = int(input("Enter Amount: "))
+                    authenticated_customer["balance"] += amount
+                elif choice == "2":
+                    while True:
+                        amount = int(input("Enter Amount: "))
+                        if amount > authenticated_customer["balance"]:
+                            print("Insufficient Balance")
+                        else:
+                            authenticated_customer["balance"] -= amount
+                            break
+                elif choice == "3":
+                    receiver_card = input("Enter receiver's card number: ")
+                    amount = int(input("Enter Amount to Transfer: "))
+                    for rec_customer in customer:
+                        if rec_customer["card"] == receiver_card:
+                            rec_customer["balance"] += amount
+                            authenticated_customer["balance"] -= amount
+                            print("Fund Transfer Successful")
+                            break
+                    else:
+                        print("Receiver not found.")
+                elif choice == "4":
+                    break
+
+    elif choice == "3":
+        print("Thank you for using HDFC BANK ATM")
+        break
